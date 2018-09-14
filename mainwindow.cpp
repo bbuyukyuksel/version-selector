@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <QKeyEvent>
+#include <QMessageBox>
 
 
 
@@ -17,6 +18,7 @@ void MainWindow::keyPressEvent(QKeyEvent* event){
         close();
     if(event->key() == Qt::Key_Return)
         ui->bt_create->click();
+
 }
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -63,7 +65,6 @@ void MainWindow::on_bt_create_clicked()
 
     const char *temp = x.c_str();
 
-
     inkex.write((const char*)temp);
     inkex.write("\n");
     inkex.write("exit\n");
@@ -82,4 +83,33 @@ void MainWindow::on_bt_create_clicked()
                           "<span style='color:silver;'>" + term_out + "</span>" +
                           "<br />" + __old);
     ui->output->setText(__new);
+    //qDebug() << "Anot" << myScreen->filepath;
+}
+
+void MainWindow::on_addFile_clicked()
+{
+    hide();
+    proc = new process();
+    proc->makedir();
+
+    myScreen = new screen();
+    myScreen->setModal(true);
+    qDebug() << "TEST : " << myScreen->exec();
+    ui->info->setText(myScreen->filepath);
+    show();
+
+    if(myScreen->filepath.contains(".tar.gz")){
+        QMessageBox myBox;
+        myBox.setText("Başarılı");
+        myBox.setIcon(QMessageBox::Icon::Information);
+        myBox.exec();
+
+    }
+    else{
+        QMessageBox myBox;
+        myBox.setText("Başarısız");
+        myBox.setIcon(QMessageBox::Icon::Information);
+        myBox.exec();
+    }
+
 }

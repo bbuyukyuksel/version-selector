@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "screen.h"
+#include "process.h"
 
 namespace Ui {
 class MainWindow;
@@ -20,9 +22,13 @@ private slots:
 
     void on_bt_create_clicked();
 
+    void on_addFile_clicked();
+
 private:
     Ui::MainWindow *ui;
     void keyPressEvent(QKeyEvent*);
+    screen *myScreen;
+    process *proc;
 };
 
 #endif // MAINWINDOW_H

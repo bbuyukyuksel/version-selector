@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>resources/drag-drop.png</file>
+    </qresource>
+</RCC>
