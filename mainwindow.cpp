@@ -12,8 +12,11 @@
 
 
 
+
 static int line = 1;
 static int selectedItem = -1;
+bool flag_firstChanged = true;
+bool on_off_toggled = false;
 
 void MainWindow::keyPressEvent(QKeyEvent* event){
     if(event->key() == Qt::Key_Escape)
@@ -32,9 +35,12 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->info->setText("Selected Version : ");
+    this->setWindowTitle("JVS");
 
+    this->setWindowIcon(QIcon(":/resources/icon.png"));
     refreshPool();
-
+    qDebug() << this->geometry();
+    ui->on_off->click();
 }
 
 MainWindow::~MainWindow()
@@ -45,9 +51,11 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pool_currentIndexChanged(const QString &arg1)
 {
-    ui->label->setText(arg1);
-    selectedItem = ui->pool->currentIndex();
-
+    if(!flag_firstChanged){
+        ui->label->setText(arg1);
+        ui->label->setStyleSheet("color:red;");
+        selectedItem = ui->pool->currentIndex();
+    }
 }
 
 void MainWindow::on_bt_create_clicked()
@@ -66,9 +74,11 @@ void MainWindow::on_bt_create_clicked()
 
     inkex.write((const char*)temp);
     inkex.write("\n");
+    inkex.write("\n");
     inkex.write("exit\n");
 
-    inkex.waitForFinished(100);
+
+    inkex.waitForFinished(300);
     inkex.waitForReadyRead();
 
     bytes.append(inkex.readAllStandardOutput());
@@ -157,6 +167,7 @@ void MainWindow::runCommand(QString cmd){
 }
 void MainWindow::refreshPool(){
 
+    /*
     QDir dr;
     if(!dr.cd("/opt/jvs")){
         qDebug() << dr.mkdir("/opt/jvs");
@@ -167,6 +178,70 @@ void MainWindow::refreshPool(){
     versionList.removeAt(0);
     versionList.removeAt(0);
     ui->pool->addItems(versionList);
+
+*/
+
+/*
+    QStringList lines;
+    lines.append("java alternatifi için 2 seçenek var (/usr/bin/java sağlanıyor).");
+    lines.append("  0            /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java   1081      otomatik kip");
+    lines.append("  1            /opt/jvs/jre1.8.0_181/bin/java                   1         elle ayarlanmış kip");
+    lines.append("  2            /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java   1081      elle ayarlanmış kip");
+    lines.append("  2            /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java   1081      elle ayarlanmış kip");
+    lines.append("  2            /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java   1081      elle ayarlanmış kip");
+    lines.append("* 2            /usr/lib/jvm/java-9-openjdk-amd64/jre/bin/java   1081      elle ayarlanmış kip");
+    lines.append("  2            /usr/lib/jvm/java-9-openjdk-amd64/jre/bin/java   1081      elle ayarlanmış kip");
+    lines.append("  2            /usr/lib/jvm/java-10-openjdk-amd64/jre/bin/java   1081      elle ayarlanmış kip");
+    lines.append("  2            /usr/lib/jvm/java-10-openjdk-amd64/jre/bin/java   1081      elle ayarlanmış kip");
+*/
+
+
+    runCommand("sudo update-alternatives --config java");
+    QStringList lines = term_out_global.split("\n");
+
+
+
+    /// Find Active Java Version
+
+    QString currentVersion;
+    QStringList versions;
+    QListIterator<QString> itr (lines);
+    while (itr.hasNext()) {
+        QString current = itr.next();
+        //qDebug() << "{" <<  current << "}";
+        if(!current.contains("java")){
+            lines.removeAt(lines.indexOf(current));
+        }
+        else{
+            if(current.contains("*")){
+                currentVersion = current.mid(current.indexOf('/'),current.indexOf("java ") - 11);
+            }
+            versions.append(current.mid(current.indexOf('/'),current.indexOf("java ") - 11));
+        }
+    }
+    versions.removeFirst();
+
+    QListIterator<QString> i (versions);
+    while (i.hasNext()) {
+        QString current = i.next();
+        QStringList tmp(versions);
+        tmp.removeAt(tmp.indexOf(current));
+        while(tmp.contains(current)){
+            int index = tmp.indexOf(current);
+            versions.removeAt(index+1);
+            tmp.removeAt(index);
+        }
+        //qDebug() << "REAL : " << versions;
+        //qDebug() << "TEMP : " << tmp;
+        //qDebug() << "CuRR : " << current;
+        //qDebug() << "#######################";
+    }
+
+    ui->pool->addItems(versions);
+    ui->pool->setCurrentIndex(versions.indexOf(currentVersion));
+    ui->label->setText(ui->pool->currentText());
+    flag_firstChanged = false;
+
 }
 
 
@@ -177,9 +252,36 @@ void MainWindow::on_bt_changeVersion_clicked()
     QMessageBox::information(this,"Info","Version will change : " + selectedVersion);
     /*
     update-alternatives --set java /opt/jvs/%1/bin/java
-    */
+
     QString set_alternative = QString("update-alternatives --set "
                                       "java /opt/jvs/%1/bin/java").arg(selectedVersion);
+    */
+    QString set_alternative = QString("update-alternatives --set "
+                                      "java %1").arg(selectedVersion);
+
+    //qDebug() << set_alternative;
+    ui->label->setStyleSheet("color:lightgreen;");
     runCommand(set_alternative);
 
+}
+
+
+void MainWindow::on_on_off_clicked()
+{
+    if(on_off_toggled){
+        ui->cmd->setVisible(true);
+        ui->bt_create->setVisible(true);
+        ui->scrollArea_2->setVisible(true);
+        this->setGeometry(300,300,580,298);
+        on_off_toggled = false;
+        ui->on_off->setStyleSheet("border-image:url(:/resources/on_16.png) 0 0 0 0 stretch stretch;");
+    }
+    else{
+        ui->cmd->setVisible(false);
+        ui->bt_create->setVisible(false);
+        ui->scrollArea_2->setVisible(false);
+        this->setGeometry(300,300,580,100);
+        on_off_toggled = true;
+        ui->on_off->setStyleSheet("border-image:url(:/resources/off_16.png) 0 0 0 0 stretch stretch;");
+    }
 }

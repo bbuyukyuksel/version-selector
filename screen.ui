@@ -15,7 +15,7 @@
   </property>
   <property name="styleSheet">
    <string notr="true">QLabel#icon{
-border-image:url(:/resources/drag-drop.png) 0 0 0 0 stretch stretch   ;
+border-image:url(:/resources/drag-drop.png) 0 0 0 0 stretch stretch;
 }
 QWidget#dropArea{
 background-color:white;
@@ -63,7 +63,7 @@ background-color:silver;
         <x>0</x>
         <y>0</y>
         <width>210</width>
-        <height>154</height>
+        <height>156</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout">

@@ -24,9 +24,10 @@ private slots:
 
     void on_addFile_clicked();
 
-
-
     void on_bt_changeVersion_clicked();
+
+
+    void on_on_off_clicked();
 
 private:
     QString term_out_global;
