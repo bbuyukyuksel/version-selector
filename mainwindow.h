@@ -24,11 +24,18 @@ private slots:
 
     void on_addFile_clicked();
 
+
+
+    void on_bt_changeVersion_clicked();
+
 private:
+    QString term_out_global;
     Ui::MainWindow *ui;
     void keyPressEvent(QKeyEvent*);
     screen *myScreen;
     process *proc;
+    void runCommand(QString cmd);
+    void refreshPool();
 };
 
 #endif // MAINWINDOW_H

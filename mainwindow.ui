@@ -6,15 +6,22 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>302</width>
-    <height>267</height>
+    <width>348</width>
+    <height>295</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">QPushButton#addFile{
+   <string notr="true">QLabel#label{
+	color:blue;
+}
+QLabel#info{
+	color:white;
+}
+
+QPushButton#addFile{
 	
 }
 QLabel#output{
@@ -39,13 +46,16 @@ QPushButton{
 color:gray;
 background-color:white;
 border-radius:5px;
-border:silver;
 
 padding:2px;
-}
-QPushButton:hover, focused{
 border-bottom:2px solid silver;
 border-right:2px solid silver;
+}
+QPushButton:hover, focused{
+border:silver;
+}
+QPushButton#addFile{
+color:green;
 }
 
 </string>
@@ -62,15 +72,15 @@ border-right:2px solid silver;
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>278</width>
-         <height>183</height>
+         <width>324</width>
+         <height>271</height>
         </rect>
        </property>
        <layout class="QGridLayout" name="gridLayout_2">
         <item row="0" column="0">
          <widget class="QLabel" name="info">
           <property name="text">
-           <string>Command :</string>
+           <string>...</string>
           </property>
          </widget>
         </item>
@@ -84,16 +94,6 @@ border-right:2px solid silver;
         <item row="3" column="0">
          <widget class="QComboBox" name="pool"/>
         </item>
-        <item row="3" column="1">
-         <widget class="QPushButton" name="bt_create">
-          <property name="styleSheet">
-           <string notr="true"/>
-          </property>
-          <property name="text">
-           <string>Create</string>
-          </property>
-         </widget>
-        </item>
         <item row="2" column="0" colspan="3">
          <widget class="QScrollArea" name="scrollArea_2">
           <property name="widgetResizable">
@@ -104,8 +104,8 @@ border-right:2px solid silver;
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>258</width>
-             <height>81</height>
+             <width>304</width>
+             <height>175</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout">
@@ -123,17 +123,52 @@ border-right:2px solid silver;
           </widget>
          </widget>
         </item>
-        <item row="1" column="0" colspan="3">
+        <item row="3" column="2">
+         <widget class="QPushButton" name="addFile">
+          <property name="maximumSize">
+           <size>
+            <width>50</width>
+            <height>50</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>+</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0" colspan="2">
          <widget class="QLineEdit" name="cmd">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
           <property name="placeholderText">
            <string>Command</string>
           </property>
          </widget>
         </item>
-        <item row="3" column="2">
-         <widget class="QPushButton" name="addFile">
+        <item row="1" column="2">
+         <widget class="QPushButton" name="bt_create">
+          <property name="styleSheet">
+           <string notr="true"/>
+          </property>
           <property name="text">
-           <string>+</string>
+           <string>Send</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="QPushButton" name="bt_changeVersion">
+          <property name="maximumSize">
+           <size>
+            <width>75</width>
+            <height>50</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Change</string>
           </property>
          </widget>
         </item>
@@ -142,43 +177,14 @@ border-right:2px solid silver;
        <zorder>info</zorder>
        <zorder>scrollArea_2</zorder>
        <zorder>pool</zorder>
-       <zorder>bt_create</zorder>
        <zorder>cmd</zorder>
        <zorder>addFile</zorder>
+       <zorder>bt_create</zorder>
+       <zorder>bt_changeVersion</zorder>
       </widget>
      </widget>
     </item>
    </layout>
-  </widget>
-  <widget class="QMenuBar" name="menuBar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>302</width>
-     <height>21</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QToolBar" name="mainToolBar">
-   <attribute name="toolBarArea">
-    <enum>TopToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>false</bool>
-   </attribute>
-  </widget>
-  <widget class="QStatusBar" name="statusBar"/>
-  <widget class="QToolBar" name="toolBar">
-   <property name="windowTitle">
-    <string>toolBar</string>
-   </property>
-   <attribute name="toolBarArea">
-    <enum>TopToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>false</bool>
-   </attribute>
   </widget>
   <action name="actionAdd">
    <property name="text">
