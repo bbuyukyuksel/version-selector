@@ -4,5 +4,6 @@
         <file>resources/off_16.png</file>
         <file>resources/on_16.png</file>
         <file>resources/icon.png</file>
+        <file>resources/about.png</file>
     </qresource>
 </RCC>

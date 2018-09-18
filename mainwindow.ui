@@ -14,7 +14,16 @@
    <string>MainWindow</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">QPushButton#on_off{
+   <string notr="true">QPushButton#bt_info:hover{
+background-color:lightblue;
+}
+QPushButton#bt_info{
+border:none;
+border-image:url(:/resources/about.png) 0 0 0 0 stretch stretch;
+background-color:none;
+border-radius:8px;
+}
+QPushButton#on_off{
 border:none;
 border-image:url(:/resources/off_16.png) 0 0 0 0 stretch stretch;
 border-radius:8px;
@@ -217,6 +226,22 @@ color:green;
            </widget>
           </item>
           <item>
+           <widget class="QPushButton" name="bt_info">
+            <property name="maximumSize">
+             <size>
+              <width>16</width>
+              <height>16</height>
+             </size>
+            </property>
+            <property name="cursor">
+             <cursorShape>WhatsThisCursor</cursorShape>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QPushButton" name="on_off">
             <property name="maximumSize">
              <size>
@@ -228,7 +253,7 @@ color:green;
              <cursorShape>PointingHandCursor</cursorShape>
             </property>
             <property name="text">
-             <string> </string>
+             <string/>
             </property>
            </widget>
           </item>

@@ -10,9 +10,6 @@
 #include <QDir>
 #include <iostream>
 
-
-
-
 static int line = 1;
 static int selectedItem = -1;
 bool flag_firstChanged = true;
@@ -23,10 +20,9 @@ void MainWindow::keyPressEvent(QKeyEvent* event){
         close();
     if(event->key() == Qt::Key_Return)
         ui->bt_create->click();
-    if(event->key() == Qt::Key_F1)
-        QMessageBox::information(this,"Info","Burak Büyükyüksel");
-
-
+    if(event->key() == Qt::Key_F1){
+        about();
+    }
 }
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -39,7 +35,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     this->setWindowIcon(QIcon(":/resources/icon.png"));
     refreshPool();
-    qDebug() << this->geometry();
     ui->on_off->click();
 }
 
@@ -195,15 +190,15 @@ void MainWindow::refreshPool(){
     lines.append("  2            /usr/lib/jvm/java-10-openjdk-amd64/jre/bin/java   1081      elle ayarlanmış kip");
 */
 
-
+/*
     runCommand("sudo update-alternatives --config java");
+    QStringList lines = term_out_global.split("\n");
+*/
+    runCommand("update-alternatives --list java");
     QStringList lines = term_out_global.split("\n");
 
 
-
-    /// Find Active Java Version
-
-    QString currentVersion;
+    /// Update Versions
     QStringList versions;
     QListIterator<QString> itr (lines);
     while (itr.hasNext()) {
@@ -213,13 +208,9 @@ void MainWindow::refreshPool(){
             lines.removeAt(lines.indexOf(current));
         }
         else{
-            if(current.contains("*")){
-                currentVersion = current.mid(current.indexOf('/'),current.indexOf("java ") - 11);
-            }
             versions.append(current.mid(current.indexOf('/'),current.indexOf("java ") - 11));
         }
     }
-    versions.removeFirst();
 
     QListIterator<QString> i (versions);
     while (i.hasNext()) {
@@ -235,6 +226,24 @@ void MainWindow::refreshPool(){
         //qDebug() << "TEMP : " << tmp;
         //qDebug() << "CuRR : " << current;
         //qDebug() << "#######################";
+    }
+
+    ///Find Active Version
+    QString currentVersion;
+    runCommand("update-alternatives --display java");
+    lines = term_out_global.split("\n");
+    QListIterator<QString> __itr (lines);
+    while (__itr.hasNext()) {
+        QString current = __itr.next();
+        if(current.contains("mevcut bağ")){
+            lines.removeAt(lines.indexOf(current));
+            currentVersion = current.mid(current.indexOf('/'),current.indexOf("java ") - 9);
+            break;
+        }
+    }
+    ///Clear ComboBox
+    for(int i = ui->pool->count(); i >= 0; i--){
+        ui->pool->removeItem(i);
     }
 
     ui->pool->addItems(versions);
@@ -284,4 +293,19 @@ void MainWindow::on_on_off_clicked()
         on_off_toggled = true;
         ui->on_off->setStyleSheet("border-image:url(:/resources/off_16.png) 0 0 0 0 stretch stretch;");
     }
+}
+
+void MainWindow::on_bt_info_clicked()
+{
+    about();
+}
+void MainWindow::about(){
+    QString about = "<span style='color:#838383;font-weight:bold;'> <br/>İçer içer bilgisayar başına oturur </span><hr />"
+                    "<span style=''><b>J</b>ava <b>V</b>ersion <b>S</b>elector</span><br/><br/>"
+                    "<span style=color:red;>Version : 1.0</span><br/>"
+                    "<span style=color:blue;>License : GPL</span><hr />"
+
+                    "<b style='color:#40AA40;'>Burak BÜYÜKYÜKSEL</b> <br />"
+                    "<b style='color:#40AA40;'><i>buyukyukselburak@gmail.com</i></b>";
+    QMessageBox::about(this,"Hakkımda",about);
 }

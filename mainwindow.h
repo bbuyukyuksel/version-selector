@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 #include "screen.h"
-#include "process.h"
+
 
 namespace Ui {
 class MainWindow;
@@ -29,12 +29,15 @@ private slots:
 
     void on_on_off_clicked();
 
+    void on_bt_info_clicked();
+
 private:
     QString term_out_global;
     Ui::MainWindow *ui;
     void keyPressEvent(QKeyEvent*);
     screen *myScreen;
-    process *proc;
+
+    void about();
     void runCommand(QString cmd);
     void refreshPool();
 };
